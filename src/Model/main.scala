@@ -1,4 +1,6 @@
-package BTree
+package Model
+import javax.swing.JFrame
+
 import scala.io.StdIn._
 
 object main {
@@ -14,7 +16,7 @@ object main {
     println("0. Exit")
     while (true) {
       readLine() match {
-        case "1" => tree.show()
+        case "1" => println(tree.show())
         case "2" => {
           print("With data: ")
           try {

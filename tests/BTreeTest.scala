@@ -1,7 +1,7 @@
-package BTree.tests
+package Model.tests
 
 
-import BTree.BTree
+import Model.BTree
 import org.junit.Assert._
 import org.junit.{Before, Test}
 class BTreeTest

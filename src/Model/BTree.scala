@@ -1,23 +1,26 @@
-package BTree
+package Model
 import scala.collection.mutable.ArrayBuffer
 
 class BTree[T](compare:(T,T) => Int) {
-  class Node(var value:T, var left:Node, var right:Node)
-  private var root:Node = null
-  private  var count = 0
+
+  class Node(var value: T, var left: Node, var right: Node)
+
+  private var root: Node = null
+  private var count = 0
 
   /**
     * Добавляет узел в дерево
+    *
     * @param data данные узла
     */
-  def add(data:T): Unit ={
-    def walk(n:Node): Node = {
-      if (n==null) new Node(data,null,null)
+  def add(data: T): Unit = {
+    def walk(n: Node): Node = {
+      if (n == null) new Node(data, null, null)
       else {
         val c = compare(data, n.value)
-        if(c==0) {
-          throw new IllegalArgumentException("Node "+n.value+" is already exists")
-        } else if(c<0) {
+        if (c == 0) {
+          throw new IllegalArgumentException("Node " + n.value + " is already exists")
+        } else if (c < 0) {
           n.left = walk(n.left)
         }
         else {
@@ -26,8 +29,9 @@ class BTree[T](compare:(T,T) => Int) {
         n
       }
     }
+
     root = walk(root)
-    count+=1
+    count += 1
   }
 
   /**
@@ -35,63 +39,70 @@ class BTree[T](compare:(T,T) => Int) {
     * @return число узлов в дереве
     */
   def getCount() = count
+
   /**
     * Добавляет узел в дерево
+    *
     * @param data данные узла
     */
-  def remove(data:T): Unit ={
-    def walk(n:Node): Node = {
-      if (n==null) throw new IllegalArgumentException("Node "+data+" is not exists")
+  def remove(data: T): Unit = {
+    def walk(n: Node): Node = {
+      if (n == null) throw new IllegalArgumentException("Node " + data + " is not exists")
       else {
         val c = compare(data, n.value)
-        if(c==0) { //Нашли удаляемый
-          count-=1
-          if (n.left==null) n.right
-          else if (n.right==null) n.left
+        if (c == 0) { //Нашли удаляемый
+          count -= 1
+          if (n.left == null) n.right
+          else if (n.right == null) n.left
           else { //Оба потомка есть
-            val (v,node) = removeMin(n.right) //Следующий по значению узел
+            val (v, node) = removeMin(n.right) //Следующий по значению узел
             n.right = node
             n.value = v
             n
           }
-        } else if(c<0) { //Удаляемый в левом поддереве
+        } else if (c < 0) { //Удаляемый в левом поддереве
           n.left = walk(n.left)
           n
         }
-        else {  //Удаляемый в правом поддереве
+        else { //Удаляемый в правом поддереве
           n.right = walk(n.right)
           n
         }
       }
     }
-    def removeMin(n:Node) : (T,Node) = {
-      if (n.left==null) (n.value,n.right)
+
+    def removeMin(n: Node): (T, Node) = {
+      if (n.left == null) (n.value, n.right)
       else {
-        val (v,node) = removeMin(n.right)
+        val (v, node) = removeMin(n.right)
         n.right = node
-        (v,n)
+        (v, n)
       }
     }
+
     root = walk(root)
   }
 
   /**
     * Печать дерева на экран
     */
-  def show(): Unit = {
-    def walk(n:Node, level: Int): Unit ={
-      if (n==null) return
-      walk(n.right,level+1)
+  def show(): String = {
+    def walk(n: Node, level: Int, buffer: StringBuffer): Unit = {
+      if (n == null) return
+      walk(n.right, level + 1, buffer)
       var i = 0
-      while (i < 3*level) {
-        print(" ")
-        i+=1
+      while (i < 3 * level) {
+        buffer.append(" ")
+        i += 1
       }
-      println(n.value)
-      walk(n.left,level+1)
+      buffer.append(n.value + "\n")
+      walk(n.left, level + 1, buffer)
     }
-    if (root==null) println("The tree is empty")
-    else walk(root, 0)
+
+    if (root == null) return "The tree is empty"
+    var stringBuffer = new StringBuffer("")
+    walk(root, 0, stringBuffer)
+    stringBuffer.toString
   }
 
   /**
