@@ -1,0 +1,25 @@
+apply plugin: "scala"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/']
+        }
+    }
+    test {
+        scala {
+            srcDirs = ['test/']
+        }
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.8'
+    testCompile 'junit:junit:4.12'
+}

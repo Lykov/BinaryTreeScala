@@ -1,4 +1,4 @@
-package Model
+package tree
 import javax.swing.JFrame
 
 import scala.io.StdIn._

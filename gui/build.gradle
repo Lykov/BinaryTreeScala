@@ -1,0 +1,30 @@
+apply plugin: "scala"
+apply plugin: "application"
+
+mainClassName = "BinaryTreeScala.GUI.main"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/']
+        }
+    }
+    test {
+        scala {
+            srcDirs = ['test/']
+        }
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile project(":tree")
+    compile 'org.scala-lang:scala-library:2.11.8'
+    compile 'org.scala-lang.modules:scala-swing_2.11:1.0.1'
+}
+

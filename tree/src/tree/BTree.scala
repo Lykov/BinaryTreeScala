@@ -1,4 +1,4 @@
-package Model
+package tree
 import scala.collection.mutable.ArrayBuffer
 
 class BTree[T](compare:(T,T) => Int) {
