@@ -11,35 +11,60 @@ class Frame extends MainFrame {
   // Поле вывода
   val output = new TextArea()
   val controlsPanel = new GridPanel(2,1)
-  val actionsPanel = new GridPanel(1,4)
+  val buttonsPanel = new GridPanel(2,3)
   preferredSize = new Dimension(500,400)
+
   // Добавление узла в дерево
-  actionsPanel.contents += Button("Add node") {
+  buttonsPanel.contents += Button("Add node") {
     try {
       tree.add(input.text.toInt)
       input.text = ""
     }
     catch {
-      case iae: IllegalArgumentException => output.text = iae.getLocalizedMessage()
+      case iae: IllegalArgumentException => output.text = iae.getLocalizedMessage
     }
   }
+
   // Удаление узла
-  actionsPanel.contents += Button("Remove node") {
+  buttonsPanel.contents += Button("Remove node") {
     try {
-      tree.remove(input.text.toInt)
+      tree.remove(output.text.toInt)
       input.text = ""
     }
     catch {
-      case iae: IllegalArgumentException => output.text = iae.getLocalizedMessage()
+      case _:NumberFormatException => output.text = "Incorrect input"
+      case iae:IllegalArgumentException => output.text = iae.getLocalizedMessage
     }
   }
+
   // Поиск
-  actionsPanel.contents += Button("Search node") {
+  buttonsPanel.contents += Button("Search node") {
     output.text = tree.search(input.text.toInt).toString
     input.text = ""
   }
+
+  // Балансировка
+  buttonsPanel.contents += Button("Balancing") {
+    tree = tree.balance()
+  }
+
+  // Проверка на сбалансированность
+  buttonsPanel.contents += Button("isBalanced()") {
+    output.text = tree.isBalanced().toString
+  }
+
+  buttonsPanel.contents += Button("Foreach print") {
+    val str = new StringBuilder
+    tree.foreach(println)
+    output.text = str.toString()
+    output.text.addString(str)
+  }
+
   // Вывод на экран
-  actionsPanel.contents += input
+  val actionsPanel:BorderPanel = new BorderPanel{
+    add(buttonsPanel,BorderPanel.Position.West)
+    add(input,BorderPanel.Position.Center)
+  }
   controlsPanel.contents += actionsPanel
   controlsPanel.contents += Button("Show tree") {
     output.text = tree.show()
