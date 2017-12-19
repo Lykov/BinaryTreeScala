@@ -12,11 +12,6 @@ sourceSets {
             srcDirs = ['src/']
         }
     }
-    test {
-        scala {
-            srcDirs = ['test/']
-        }
-    }
 }
 repositories {
     mavenCentral()
@@ -28,3 +23,15 @@ dependencies {
     compile 'org.scala-lang.modules:scala-swing_2.11:1.0.1'
 }
 
+// Пакуем все в jar со всеми зависимостями
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'BinaryTreeScala',
+        	'Implementation-Version': 1.0,
+        	'Main-Class': mainClassName
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+build.finalizedBy(fatJar)
